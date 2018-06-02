@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" >
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" ></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	 <style>
+	 	nav{
+	 		border-radius: 0px;
+	 	}
+ 		 .navbar-nav.navbar-center {
+    		position: absolute;
+    		left: 50%;
+	    	transform: translatex(-50%);
+		}
+		thead{
+			color:rgba(0,0,0,0.4);
+			margin-bottom: 3px;
+		}
+		thead tr:hover{
+			border:0px solid black;
+		}
+		tr:hover{
+			border:2px solid aqua;
+		}
+		tr td{
+			border-top: 1px solid rgba(0,0,0,0.3);
+			padding:30px;
+			font-weight: bold;
+		}
+		.user-form{
+			position: fixed;
+			top:0;
+			left:0;
+			background-color: black;
+			z-index:2;
+			width:100%;
+			height:100%;
+
+			overflow: scroll;
+		}
+		.form-container{
+			background-color: white;
+			height:auto;
+			padding:50px;
+		}
+		#popup{
+			display:none;
+			height:auto;
+			width:80px;
+			border-radius:5px;
+			padding:10px;
+			background-color: rgba(0,0,0,0.3);
+			font-weight: bold;
+			color:white;
+			position: relative;
+		}
+		#popup:before {
+    	content:'';
+    	position:absolute;
+    	top:-20px;
+    	left:28px;
+   		width:0;
+    	height:0;
+    	border:10px solid transparent;
+    	border-bottom:10px solid rgba(0,0,0,0.3);
+}
+  </style>
+</head>
+<body ng-app="app" ng-controller="ctrl">
+	<nav class="navbar navbar-inverse">
+ 	    <div class="container-fluid">
+    	 	<div class="navbar-header">
+      			<a class="navbar-brand" href="#">Project Name Here</a>
+ 		    </div>
+    		<ul class="nav navbar-nav navbar-center">
+      			<li><a href="tasks">Tasks</a></li>
+      			<li class="active"><a href="users">Users</a></li>
+      			<li><a href="activity">Activity</a></li>
+      			<li><a href="members">Members</a></li>
+    		</ul>
+    		<ul class="nav navbar-nav navbar-right">
+ 		        <li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
+      	   		<li><a href="#"><span class="glyphicon glyphicon-phone-alt"></span> Support</a></li>
+	            <li><a href="#"><span class="glyphicon glyphicon-comment"></span> </a></li>	
+
+    		</ul>
+	  	</div>
+	</nav>
+	<div class="row container-fluid bg-light" style="padding-bottom: 25px">
+		<div class="col-md-4 text-center"><h1>User Directory</h1></div>
+		<div class="col-md-4"></div>
+		<div class="col-md-4 text-center"><button class="btn btn-primary" style="margin-top: 17px;" ng-click="hide_user_form();"><span class="glyphicon glyphicon-plus"></span> Add New User</button></div>
+		
+	</div>
+
+	<div style="background-color: rgba(0,0,0,0.05);padding:45px">
+		<div class="container"  style="background-color: rgba(255,255,255,1);">
+		<table class="table">
+   			<thead>
+    			  <tr>
+   	 			    <th>USERNAME</th>
+    			    <th>ADDRESS</th>
+    			    <th>CONTACT</th>
+    			    <th>EMAIL</th>
+			        <th></th>	
+
+      			</tr>
+    		</thead>
+    		<tbody>
+      			<tr ng-repeat="user in users" ng-click="setData()" class="user">
+      				<td>{{user.name}}</td>
+      				<td>{{user.address}}</td>
+      				<td>{{user.contact}}</td>
+      				<td>{{user.email}}</td>
+      				<td><a>
+          				<span class="glyphicon glyphicon-tasks">
+          				
+          				</span>
+        				</a>
+        			</td>
+      			</tr>
+    		</tbody>
+  		</table>
+		</div>
+	</div>
+
+	<div class="user-form" ng-hide="user_form">
+		<div class="row container-fluid" style="padding-top:70px">
+			<div class="col-md-3">
+			</div>
+			<div class="col-md-6 form-container row">
+				<div class="col-md-6"><h4 style="font-weight: bold">{{insert_status}}</h4></div>
+				<div class="col-md-6 text-right"><h4 ng-click="hide_user_form()">X</h4></div>
+				<div class="col-md-3" style="margin-top:25px;border:1px solid rgba(0,0,0,0.2);padding:5px;	">
+					<img src="/images/download.png" style="width:100px;height:100px;margin:5px;border-radius: 50%;" >
+					<button class="btn col-md-12">Upload</button></div>
+			<form ng-submit="submit()">
+				<div class="col-md-9" style="margin-top:25px;height:80px"><h4>User Name</h4>
+					<input type="text" class="form-control " name="" placeholder="enter full name" ng-model="user.name" required>
+				</div>
+				<div class="col-md-9" style="height:80px" ><h4>Address</h4>
+					<input type="text" class="form-control" name="" placeholder="enter address" ng-model="user.address" required>
+				</div>
+				<div class="col-md-6"><h4>Contact</h4>
+					<input type="text" class="form-control" name="" placeholder="enter contact number" ng-model="user.contact" required>
+				</div>
+				<div class="col-md-6"><h4>Email</h4>
+					<input type="text" class="form-control" name=""  placeholder="enter email" ng-model="user.email" required>
+				</div>
+				<div class="col-md-12" style="margin-top: 25px"><button type="submit" class="btn btn-primary col-md-12">{{insert_status}}</button></div>
+			</form>
+
+
+				
+			</div>
+		</div>
+	</div>
+
+
+<div  id="popup">
+	<a ng-click="fetchData();">Update</a>
+	<br>
+	<a ng-click="delete()">Delete</a>
+</div>
+
+
+
+	<script type="text/javascript">
+		var app = angular.module('app', []);
+
+		app.controller('ctrl', function($scope, $http) {
+			
+			var fetchAllData=function(){
+				$http({
+        		url: '/profile',
+        		method: "GET"
+    			})
+    			.then(function(response) {
+        			$scope.users=response.data;
+   		 	});
+    		}
+    		$scope.user={};
+    		$scope.user_form=true;
+    		$scope.insert_status="Add New User";
+    		data={"email":null};
+    		$scope.insert=function(){
+    			$scope.insert_status="Adding...";
+    			$http({
+        		url: '/insert',
+        		method: "POST",
+        		data:$scope.user
+    			})
+    			.then(function(response) {
+        			console.log(response);
+        			if(response.data.n==1){
+        				$scope.insert_status="Inserted";
+        			}
+        			else{
+        				$scope.insert_status="Error!!!"
+        			}
+   		 		});
+
+    		}
+
+    		$scope.update=function(){
+    			var updateData={"query":data,"update":$scope.user};
+    		console.log(updateData);
+    			$http({
+        		url: '/update',
+        		method: "POST",
+        		data:updateData
+    			})
+    			.then(function(response) {
+        			$scope.insert_status="Updated";
+        			
+   		 		});
+    		}
+
+    		$scope.delete=function(){
+    			
+    			
+    			$http({
+        		url: '/delete',
+        		method: "POST",
+        		data:data
+    			})
+    			.then(function(response) {
+        			 
+        			alert("deleted");
+
+   		 		});
+   		 		fetchAllData();
+
+    		}
+
+   			$scope.hide_user_form=function(){
+   				$scope.user_form=$scope.user_form?false:true;
+   				$scope.user={};
+   				$scope.insert_status="Add New User";
+   				fetchAllData();
+   			}
+   			$scope.setData=function(email){
+   				data.email=email;
+   			}
+   			$scope.fetchData=function(){
+   				$scope.insert_status="Fetching Data..";
+   				$scope.user_form=false;
+   				$http({
+        		url: '/fetchData',
+        		method: "POST",
+        		data:data
+    			})
+    			.then(function(response) {
+        			$scope.user=response.data;
+        			delete $scope.user._id;
+        			$scope.insert_status="Update User";
+   		 		});
+
+
+   			}
+   			$scope.submit=function(){
+   				if($scope.insert_status=="Add New User"){
+   					//console.log("inserting");
+   					$scope.insert();
+   				}
+   				else{
+   					//console.log("updating");
+   					$scope.update();
+   				}
+   			}
+   			fetchAllData();
+		});
+
+		$(document).ready(function(){
+
+    		$("table").bind('click', function (event) {
+    			$('#popup').css('left',event.pageX-35);      // <<< use pageX and pageY
+    			$('#popup').css('top',event.pageY+17	);
+    			$('#popup').css('display','inline');     
+    			$("#popup").css("position", "absolute");  // <<< also make it absolute!
+    		});
+    		$("#popup").click(function(){
+    			$('#popup').css('display','none');     
+    			
+    		});
+    		
+		});
+	</script>
+</body>
+</html>
